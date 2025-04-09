@@ -1,0 +1,39 @@
+/*
+ * Squelette KLD
+ * Inspiré de l'article d'Andrew Reiter paru sur Daemonnews
+ */
+
+#include <sys/types.h>
+#include <sys/systm.h>  /* uprintf */
+#include <sys/errno.h>
+#include <sys/param.h>  /* defines utilise dans kernel.h */
+#include <sys/kernel.h> /* types utilise dans le module d'initialisation */
+#include <sys/module.h>
+
+/*
+ * charge le gestionnaire quit traite du chargement et déchargement d'un KLD.
+ */
+
+static int
+mod_loader(struct module *m, int what, void *arg)
+{
+  int err = 0;
+
+  switch (what) {
+  case MOD_LOAD:                /* kldload */
+
+    uprintf("Skeleton KLD charge.\n");
+    break;
+  case MOD_UNLOAD:
+    uprintf("Skeleton KLD decharge.\n");
+    break;
+  default:
+    err = EINVAL;
+    break;
+  }
+  return(err);
+}
+
+/* Declare ce module au reste du noyau */
+
+DECLARE_MODULE(mod, mod_loader, SI_SUB_KLD, SI_ORDER_ANY);

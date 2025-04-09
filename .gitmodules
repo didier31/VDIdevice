@@ -1,0 +1,6 @@
+[submodule "src/usr/srv/ext/libvbox"]
+	path = src/usr/srv/ext/libvbox
+	url = https://github.com/zrax/libvbox.git
+[submodule "src/usr/dep/libvbox"]
+	path = src/usr/dep/libvbox
+	url = https://github.com/zrax/libvbox.git
