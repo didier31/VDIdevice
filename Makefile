@@ -2,7 +2,7 @@
 modctl:src/usr/modctl.c
 	cc $< -o $@
 
-SRCS=src/mod/mod.c src/mod/device.c 
+SRCS=src/krn/vdevice/vdmc.c src/krn/vdevice/vd.c 
 KMOD=mod
 
 .include <bsd.kmod.mk>
