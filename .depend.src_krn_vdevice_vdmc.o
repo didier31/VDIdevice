@@ -24,4 +24,15 @@ src/krn/vdevice/vdmc.o: src/krn/vdevice/vdmc.c \
   /usr/src/sys/sys/_rmlock.h /usr/src/sys/sys/resource.h machine/pcpu.h \
   machine/_pmap.h machine/segments.h x86/segments.h machine/tss.h \
   machine/pcpu_aux.h /usr/src/sys/sys/kpilite.h \
-  /usr/src/sys/sys/libkern.h /usr/src/sys/sys/ioccom.h src/include/mod.h
+  /usr/src/sys/sys/libkern.h /usr/src/sys/sys/ioccom.h \
+  src/include/vdmc.h /usr/src/sys/sys/proc.h /usr/src/sys/sys/event.h \
+  /usr/src/sys/sys/condvar.h /usr/src/sys/sys/lock_profile.h \
+  /usr/src/sys/sys/osd.h /usr/src/sys/sys/rtprio.h \
+  /usr/src/sys/sys/runq.h machine/runq.h /usr/src/sys/sys/sigio.h \
+  /usr/src/sys/sys/signal.h /usr/src/sys/sys/_sigval.h machine/signal.h \
+  x86/signal.h /usr/src/sys/sys/signalvar.h /usr/src/sys/sys/ucontext.h \
+  machine/ucontext.h x86/ucontext.h /usr/src/sys/sys/_ucontext.h \
+  /usr/src/sys/sys/ucred.h /usr/src/sys/bsm/audit.h \
+  /usr/src/sys/sys/_domainset.h machine/proc.h machine/pcb.h \
+  machine/fpu.h x86/fpu.h machine/cpu.h machine/psl.h x86/psl.h \
+  machine/frame.h x86/frame.h

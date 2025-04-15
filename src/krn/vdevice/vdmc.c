@@ -5,19 +5,20 @@
 #include <sys/systm.h>
 
 #include <sys/ioccom.h>
-#include "src/include/mod.h"
+#include "src/include/vdmc.h"
 
 static struct cdevsw vdmc_cdevsw;
 static struct cdev* vdmc_dev;
+static struct proc *daemon = NULL;
 
 static int vdmc_modevent(module_t mod __unused, int event, void *arg __unused) {
   int error = 0;
   switch (event) {
-  case vdmc_LOAD:
+  case MOD_LOAD:
     uprintf("Hello, world!\n");
-    vdmc_dev = make_dev(&vdmc_cdevsw, 0, UID_ROOT, GID_WHEEL, 0600, "mod");
+    vdmc_dev = make_dev(&vdmc_cdevsw, 0, UID_ROOT, GID_WHEEL, 0600, "vdctl");
     break;
-  case vdmc_UNLOAD:
+  case MOD_UNLOAD:
     destroy_dev(vdmc_dev);
     uprintf("Good-bye, cruel world!\n");
     break;
@@ -27,6 +28,8 @@ static int vdmc_modevent(module_t mod __unused, int event, void *arg __unused) {
   }
   return (error);
 }
+
+#include <sys/proc.h>
 
 static int vdmc_ioctl(struct cdev *dev, u_long cmd, caddr_t data, int fflag,
                      struct thread *td) {
@@ -41,6 +44,19 @@ static int vdmc_ioctl(struct cdev *dev, u_long cmd, caddr_t data, int fflag,
     break;
   case IOCTL_LIST_VS_DEVICES:
     uprintf("LIST_VS_DEVICES_CMD\n");
+    break;
+  case IOCTL_READ_VD:
+    uprintf("IOCTL_READ_VD\n");
+    break;
+  case IOCTL_WRITE_VD:
+    uprintf("IOCTL_WRITE_VD\n");
+    break;
+  case IOCTL_INTRODUCE_DAEMON:
+    uprintf("IOCTL_INTRODUCE_DAEMON, pid = ");
+    pid_t srvpid;
+    copyin(data, &srvpid, sizeof(pid_t));
+    uprintf("%d\n", srvpid);
+    daemon = pfind(srvpid);
     break;
   default:
     error = ENOTTY;
@@ -59,14 +75,21 @@ static int vdmc_close(struct cdev *dev, int fflag, int devtype, struct thread *t
   uprintf("%s()\n", __func__);
   return 0;
 }
+
+#include	<sys/types.h>
+#include	<sys/signalvar.h>
+
+
 static int vdmc_write(struct cdev *dev, struct uio *uio, int ioflag)
 {
+  kern_psignal(daemon, SIGCONT);
   uprintf("%s()\n", __func__);
   return 0;
 }
 
 static int vdmc_read(struct cdev *dev, struct uio *uio, int ioflag)
 {
+  kern_psignal(daemon, SIGCONT);
   uprintf("%s()\n", __func__);
   return 0;
 }
