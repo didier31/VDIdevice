@@ -9,7 +9,6 @@
 
 static struct cdevsw vdmc_cdevsw;
 static struct cdev* vdmc_dev;
-static struct proc *daemon = NULL;
 
 static int vdmc_modevent(module_t mod __unused, int event, void *arg __unused) {
   int error = 0;
@@ -51,13 +50,6 @@ static int vdmc_ioctl(struct cdev *dev, u_long cmd, caddr_t data, int fflag,
   case IOCTL_WRITE_VD:
     uprintf("IOCTL_WRITE_VD\n");
     break;
-  case IOCTL_INTRODUCE_DAEMON:
-    uprintf("IOCTL_INTRODUCE_DAEMON, pid = ");
-    pid_t srvpid;
-    copyin(data, &srvpid, sizeof(pid_t));
-    uprintf("%d\n", srvpid);
-    daemon = pfind(srvpid);
-    break;
   default:
     error = ENOTTY;
     break;
@@ -82,14 +74,14 @@ static int vdmc_close(struct cdev *dev, int fflag, int devtype, struct thread *t
 
 static int vdmc_write(struct cdev *dev, struct uio *uio, int ioflag)
 {
-  kern_psignal(daemon, SIGCONT);
+  //kern_psignal(daemon, SIGCONT);
   uprintf("%s()\n", __func__);
   return 0;
 }
 
 static int vdmc_read(struct cdev *dev, struct uio *uio, int ioflag)
 {
-  kern_psignal(daemon, SIGCONT);
+  //kern_psignal(daemon, SIGCONT);
   uprintf("%s()\n", __func__);
   return 0;
 }

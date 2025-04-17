@@ -4,10 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
-#include <unistd.h>
 #include <err.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
+#include <sys/thr.h>
+#include <unistd.h>
 
 /*
  * Include the XPCOM headers
@@ -113,13 +114,8 @@ int main(int argc, char **argv) {
 
   int fd = open("/dev/vdctl", O_RDWR);
   int i;
-  pid_t ownpid = getpid();
   if (fd < 0)
     err(1, "open(/dev/vdctl)");
-  printf("srv: My own pid is %d\n", ownpid);
-  i = ioctl(fd, IOCTL_INTRODUCE_DAEMON, &ownpid);
-  if (i < 0)
-    err(1, "ioctl(/dev/vdctl)");
   while (running) {
     nsCOMPtr<IMedium> medium;
     handle(0) = newVirtualDevice(
@@ -127,6 +123,7 @@ int main(int argc, char **argv) {
         NS_LITERAL_STRING(
             "/home/didier/VirtualBox VMs/Waydroid/NewVirtualDisk.vdi")
             .get());
+    //kill(SIGSTOP, ownpid);
     /*
      * Process events that might have queued up in the XPCOM event
      * queue. If we don't process them, the server might hang.

@@ -42,9 +42,7 @@ Communication from daemon to kernel
 */
 
 #define KRN_REQUEST_CMD 6
-#define INTRODUCE_DAEMON_CMD 7
-
-#define IOCTL_INTRODUCE_DAEMON _IOW(VS_GROUP, INTRODUCE_DAEMON_CMD, pid_t)
+// Arg : result of thr_self()
 
 struct krn_request {
   enum REQUEST_TYPE {
