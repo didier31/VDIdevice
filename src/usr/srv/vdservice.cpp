@@ -7,7 +7,6 @@
 #include <err.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
-#include <sys/thr.h>
 #include <unistd.h>
 
 /*
@@ -114,15 +113,17 @@ int main(int argc, char **argv) {
 
   int fd = open("/dev/vdctl", O_RDWR);
   int i;
+  struct krn_request_t krn_request;
   if (fd < 0)
     err(1, "open(/dev/vdctl)");
   while (running) {
     nsCOMPtr<IMedium> medium;
-    handle(0) = newVirtualDevice(
+    i = ioctl(fd, IOCTL_KRN_REQUEST, &krn_request);
+    /* handle(0) = newVirtualDevice(
         virtualBox,
         NS_LITERAL_STRING(
             "/home/didier/VirtualBox VMs/Waydroid/NewVirtualDisk.vdi")
-            .get());
+            .get()); */
     //kill(SIGSTOP, ownpid);
     /*
      * Process events that might have queued up in the XPCOM event

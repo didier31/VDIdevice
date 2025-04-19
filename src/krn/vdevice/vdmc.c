@@ -4,11 +4,11 @@
 #include <sys/module.h>
 #include <sys/systm.h>
 
-#include <sys/ioccom.h>
 #include "src/include/vdmc.h"
 
 static struct cdevsw vdmc_cdevsw;
 static struct cdev* vdmc_dev;
+
 
 static int vdmc_modevent(module_t mod __unused, int event, void *arg __unused) {
   int error = 0;
@@ -44,12 +44,9 @@ static int vdmc_ioctl(struct cdev *dev, u_long cmd, caddr_t data, int fflag,
   case IOCTL_LIST_VS_DEVICES:
     uprintf("LIST_VS_DEVICES_CMD\n");
     break;
-  case IOCTL_READ_VD:
-    uprintf("IOCTL_READ_VD\n");
-    break;
-  case IOCTL_WRITE_VD:
-    uprintf("IOCTL_WRITE_VD\n");
-    break;
+  case IOCTL_KRN_REQUEST:
+    uprintf("IOCTL_KRN_REQUEST_CMD\n");
+    break;  
   default:
     error = ENOTTY;
     break;
@@ -67,10 +64,6 @@ static int vdmc_close(struct cdev *dev, int fflag, int devtype, struct thread *t
   uprintf("%s()\n", __func__);
   return 0;
 }
-
-#include	<sys/types.h>
-#include	<sys/signalvar.h>
-
 
 static int vdmc_write(struct cdev *dev, struct uio *uio, int ioflag)
 {
