@@ -3,32 +3,10 @@
 #include <sys/kernel.h>
 #include <sys/module.h>
 #include <sys/systm.h>
+#include <sys/ioccom.h>
 
 #include "src/include/vdmc.h"
 #include "src/krn/include/kthreadsafe_queue.h"
-
-
-static struct cdevsw vdmc_cdevsw;
-static struct cdev* vdmc_dev;
-
-
-static int vdmc_modevent(module_t mod __unused, int event, void *arg __unused) {
-  int error = 0;
-  switch (event) {
-  case MOD_LOAD:
-    uprintf("Hello, world!\n");
-    vdmc_dev = make_dev(&vdmc_cdevsw, 0, UID_ROOT, GID_WHEEL, 0600, "vdctl");
-    break;
-  case MOD_UNLOAD:
-    destroy_dev(vdmc_dev);
-    uprintf("Good-bye, cruel world!\n");
-    break;
-  default:
-    error = EOPNOTSUPP;
-    break;
-  }
-  return (error);
-}
 
 #include <sys/proc.h>
 
@@ -82,8 +60,26 @@ static int vdmc_read(struct cdev *dev, struct uio *uio, int ioflag)
 }
 
 static struct cdevsw vdmc_cdevsw = {
-    .d_version = D_VERSION, .d_open = vdmc_open, .d_close = vdmc_close, .d_read = vdmc_read, .d_write = vdmc_write,
-    .d_ioctl = vdmc_ioctl, .d_name = "vdmc"};
+  .d_version = D_VERSION, .d_open = vdmc_open, .d_close = vdmc_close, .d_read = vdmc_read, .d_write = vdmc_write,
+  .d_ioctl = vdmc_ioctl, .d_name = "vdmc"};
+
+static int vdmc_modevent(module_t mod __unused, int event, void *arg __unused) {
+  int error = 0;
+  switch (event) {
+  case MOD_LOAD:
+    uprintf("Hello, world!\n");
+    vdmc_dev = make_dev(&vdmc_cdevsw, 0, UID_ROOT, GID_WHEEL, 0600, "vdctl");
+    break;
+  case MOD_UNLOAD:
+    destroy_dev(vdmc_dev);
+    uprintf("Good-bye, cruel world!\n");
+    break;
+  default:
+    error = EOPNOTSUPP;
+    break;
+  }
+  return (error);
+}
 
 static moduledata_t vdmc_mod = {"vdmc", vdmc_modevent, NULL};
 DECLARE_MODULE(mod, vdmc_mod, SI_SUB_DRIVERS, SI_ORDER_MIDDLE);
