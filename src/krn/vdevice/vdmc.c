@@ -5,6 +5,8 @@
 #include <sys/systm.h>
 
 #include "src/include/vdmc.h"
+#include "src/krn/include/kthreadsafe_queue.h"
+
 
 static struct cdevsw vdmc_cdevsw;
 static struct cdev* vdmc_dev;
