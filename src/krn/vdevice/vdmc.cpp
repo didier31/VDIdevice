@@ -47,24 +47,23 @@ static int vdmc_close(struct cdev *dev, int fflag, int devtype, struct thread *t
 
 static int vdmc_write(struct cdev *dev, struct uio *uio, int ioflag)
 {
-  //kern_psignal(daemon, SIGCONT);
   uprintf("%s()\n", __func__);
   return 0;
 }
 
 static int vdmc_read(struct cdev *dev, struct uio *uio, int ioflag)
 {
-  //kern_psignal(daemon, SIGCONT);
   uprintf("%s()\n", __func__);
   return 0;
 }
 
 static struct cdevsw vdmc_cdevsw = {
-  .d_version = D_VERSION, .d_open = vdmc_open, .d_close = vdmc_close, .d_read = vdmc_read, .d_write = vdmc_write,
-  .d_ioctl = vdmc_ioctl, .d_name = "vdmc"};
+  .d_version = D_VERSION, .d_name = "vdmc", .d_open = vdmc_open, .d_close = vdmc_close, .d_read = vdmc_read, .d_write = vdmc_write,
+  .d_ioctl = vdmc_ioctl};
 
 static int vdmc_modevent(module_t mod __unused, int event, void *arg __unused) {
   int error = 0;
+  static struct cdev* vdmc_dev;
   switch (event) {
   case MOD_LOAD:
     uprintf("Hello, world!\n");

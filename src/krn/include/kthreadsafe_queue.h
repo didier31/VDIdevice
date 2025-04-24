@@ -10,8 +10,10 @@
 */
 
  template<typename T, size_t capacity> class queue {
-    size_t lastAllocated = -1;
-    size_t nextFree = 0;
+
+    size_t firstAllocated = 0;
+    size_t firstFree = 0;   // So, the set of allocated slice is the interval [ firstAllocated, firstFree [ 
+                            // or the [ firstAllocated, capacity [ U [ 0, firstFree [
     T buffer[capacity];
 
     public:
