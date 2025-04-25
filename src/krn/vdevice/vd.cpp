@@ -4,6 +4,9 @@
 
 #include "src/include/vd.h"
 
+#define DEFINE_DECLARE_IO_QUEUE
+
+#include "src/krn/include/io_queue.h"
 
 static int vd_open(struct cdev *dev, int oflags, int devtype, struct thread *td)
 {
@@ -28,8 +31,8 @@ static int vd_read(struct cdev *dev, struct uio *uio, int ioflag)
 }
 
 static struct cdevsw dev_cdevsw = {
-    .d_version = D_VERSION, .d_open = vd_open, .d_close = vd_close, .d_read = vd_read, .d_write = vd_write,
-    .d_name = "vd%d"};
+  .d_version = D_VERSION, .d_name = "vd%d", .d_open = vd_open, .d_close = vd_close, .d_read = vd_read, .d_write = vd_write,
+    };
 
 
 struct cdev* make_media_a_vd(char* virtualMediaPathName)

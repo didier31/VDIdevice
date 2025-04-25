@@ -6,7 +6,9 @@
 #include <sys/ioccom.h>
 
 #include "src/include/vdmc.h"
-#include "src/krn/include/kthreadsafe_queue.h"
+
+#define DEFINE_DECLARE_IO_QUEUE extern
+#include "src/krn/include/io_queue.h"
 
 #include <sys/proc.h>
 
@@ -36,25 +38,21 @@ static int vdmc_ioctl(struct cdev *dev, u_long cmd, caddr_t data, int fflag,
 
 static int vdmc_open(struct cdev *dev, int oflags, int devtype, struct thread *td)
 {
-  uprintf("%s()\n", __func__);
-  return 0;
+  return -1;
 }
 static int vdmc_close(struct cdev *dev, int fflag, int devtype, struct thread *td)
 {
-  uprintf("%s()\n", __func__);
-  return 0;
+  return -1;
 }
 
 static int vdmc_write(struct cdev *dev, struct uio *uio, int ioflag)
 {
-  uprintf("%s()\n", __func__);
-  return 0;
+  return -1;
 }
 
 static int vdmc_read(struct cdev *dev, struct uio *uio, int ioflag)
 {
-  uprintf("%s()\n", __func__);
-  return 0;
+  return -1;
 }
 
 static struct cdevsw vdmc_cdevsw = {
