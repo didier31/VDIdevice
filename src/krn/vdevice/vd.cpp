@@ -21,12 +21,36 @@ static int vd_close(struct cdev *dev, int fflag, int devtype, struct thread *td)
 static int vd_write(struct cdev *dev, struct uio *uio, int ioflag)
 {
   uprintf("%s()\n", __func__);
+  struct krn_request_t write_request = {
+    .type = krn_request_t::WRITE_VD,
+    .payload {
+      .io_buffer = { 
+        .size = 0, 
+        .ptr = NULL 
+      }
+    }
+  };
+  char description[51];
+  snprintf(description, 51, "tsleep(write_request.payload.io_buffer.ptr = %p)", write_request.payload.io_buffer.ptr);
+  tsleep(write_request.payload.io_buffer.ptr, 0, description, 0);
   return 0;
 }
 
 static int vd_read(struct cdev *dev, struct uio *uio, int ioflag)
 {
   uprintf("%s()\n", __func__);
+  struct krn_request_t read_request = {
+    .type = krn_request_t::READ_VD,
+    .payload {
+      .io_buffer = { 
+        .size = 0, 
+        .ptr = NULL 
+      }
+    }
+  };
+  char description[51];
+  snprintf(description, 51, "tsleep(read_request.payload.io_buffer.ptr = %p)", read_request.payload.io_buffer.ptr);
+  tsleep(read_request.payload.io_buffer.ptr, 0, description, 0);
   return 0;
 }
 

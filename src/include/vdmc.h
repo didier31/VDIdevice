@@ -33,8 +33,6 @@ struct vs_devices_info {
 Communication from daemon to kernel
 */
 
-// Arg : result of thr_self()
-
 struct krn_request_t {
   enum REQUEST_TYPE {
     READ_VD = 0,
@@ -56,6 +54,9 @@ struct krn_request_t {
   } payload;
 };
 #define KRN_REQUEST_CMD 51
-#define IOCTL_KRN_REQUEST _IOWR(VS_GROUP, KRN_REQUEST_CMD, struct krn_request_t*)
+#define IOCTL_KRN_REQUEST _IOW(VS_GROUP, KRN_REQUEST_CMD, struct krn_request_t*)
+
+#define SRV_ANSWER_CMD 52
+#define IOCTL_SRV_ANSWER _IOW(VS_GROUP, SRV_ANSWER_CMD, struct krn_request_t*)
 
 #endif

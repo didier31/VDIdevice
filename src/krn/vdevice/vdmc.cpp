@@ -26,9 +26,17 @@ static int vdmc_ioctl(struct cdev *dev, u_long cmd, caddr_t data, int fflag,
   case IOCTL_LIST_VS_DEVICES:
     uprintf("LIST_VS_DEVICES_CMD\n");
     break;
+  
   case IOCTL_KRN_REQUEST:
     uprintf("IOCTL_KRN_REQUEST_CMD\n");
-    break;  
+    *((struct krn_request_t*) data) = io_requests.exit();
+    return 0;
+
+  case IOCTL_SRV_ANSWER:
+    uprintf("IOCTL_KRN_REQUEST_CMD\n");
+    wakeup(((struct krn_request_t*) data)->payload.io_buffer.ptr);
+    return 0;
+
   default:
     error = ENOTTY;
     break;
