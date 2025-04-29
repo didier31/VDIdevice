@@ -1,18 +1,17 @@
-#include <sys/param.h>
-#include <sys/conf.h>
+#include "src/include/vdmc.h"
+
+#include "src/krn/include/io_queue.h"
+
+extern "C"
+{
 #include <sys/kernel.h>
 #include <sys/module.h>
 #include <sys/systm.h>
 #include <sys/ioccom.h>
-
-#include "src/include/vdmc.h"
-
-#define DEFINE_DECLARE_IO_QUEUE extern
-#include "src/krn/include/io_queue.h"
-
 #include <sys/proc.h>
+}
 
-static int vdmc_ioctl(struct cdev *dev, u_long cmd, caddr_t data, int fflag,
+extern "C" int vdmc_ioctl(struct cdev *dev, u_long cmd, caddr_t data, int fflag,
                      struct thread *td) {
   int error = 0;
   uprintf("%s()\n", __func__);
@@ -44,30 +43,30 @@ static int vdmc_ioctl(struct cdev *dev, u_long cmd, caddr_t data, int fflag,
   return (error);
 }
 
-static int vdmc_open(struct cdev *dev, int oflags, int devtype, struct thread *td)
+extern "C" int vdmc_open(struct cdev *dev, int oflags, int devtype, struct thread *td)
 {
   return -1;
 }
-static int vdmc_close(struct cdev *dev, int fflag, int devtype, struct thread *td)
-{
-  return -1;
-}
-
-static int vdmc_write(struct cdev *dev, struct uio *uio, int ioflag)
+extern "C" int vdmc_close(struct cdev *dev, int fflag, int devtype, struct thread *td)
 {
   return -1;
 }
 
-static int vdmc_read(struct cdev *dev, struct uio *uio, int ioflag)
+extern "C" int vdmc_write(struct cdev *dev, struct uio *uio, int ioflag)
 {
   return -1;
 }
 
-static struct cdevsw vdmc_cdevsw = {
+extern "C" int vdmc_read(struct cdev *dev, struct uio *uio, int ioflag)
+{
+  return -1;
+}
+
+extern "C" struct cdevsw vdmc_cdevsw = {
   .d_version = D_VERSION, .d_name = "vdmc", .d_open = vdmc_open, .d_close = vdmc_close, .d_read = vdmc_read, .d_write = vdmc_write,
   .d_ioctl = vdmc_ioctl};
 
-static int vdmc_modevent(module_t mod __unused, int event, void *arg __unused) {
+extern "C" int vdmc_modevent(module_t mod __unused, int event, void *arg __unused) {
   int error = 0;
   static struct cdev* vdmc_dev;
   switch (event) {
@@ -86,5 +85,8 @@ static int vdmc_modevent(module_t mod __unused, int event, void *arg __unused) {
   return (error);
 }
 
-static moduledata_t vdmc_mod = {"vdmc", vdmc_modevent, NULL};
-DECLARE_MODULE(mod, vdmc_mod, SI_SUB_DRIVERS, SI_ORDER_MIDDLE);
+extern "C" moduledata_t vdmc_mod = {"vdmc", vdmc_modevent, NULL};
+extern "C"
+{
+  DECLARE_MODULE(mod, vdmc_mod, SI_SUB_DRIVERS, SI_ORDER_MIDDLE);
+}

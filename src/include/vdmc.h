@@ -1,11 +1,12 @@
 #ifndef __MOD_H__
 #define __MOD_H__
 
+extern "C" {
+#include <sys/param.h>
+#include <sys/conf.h>
 #include <sys/_stdint.h>
 
-
 #define VS_GROUP 0xAA
-
 struct vs_device_info {
   char *devicePath;
   char *mediaPath;
@@ -58,5 +59,7 @@ struct krn_request_t {
 
 #define SRV_ANSWER_CMD 52
 #define IOCTL_SRV_ANSWER _IOW(VS_GROUP, SRV_ANSWER_CMD, struct krn_request_t*)
+
+}
 
 #endif

@@ -4,6 +4,10 @@
 #include "src/krn/include/kthreadsafe_queue.h"
 #include "src/include/vdmc.h"
 
-DEFINE_DECLARE_IO_QUEUE kthreadsafe_queue<struct krn_request_t, 512> io_requests;
+template class kthreadsafe_queue<struct krn_request_t, 512>;
+
+typedef kthreadsafe_queue<struct krn_request_t, 512> io_requests_t;
+
+extern io_requests_t io_requests;
 
 #endif
