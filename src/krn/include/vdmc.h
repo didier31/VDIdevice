@@ -18,8 +18,13 @@ EXTERN_C int vdmc_write(struct cdev *dev, struct uio *uio, int ioflag);
 
 EXTERN_C int vdmc_read(struct cdev *dev, struct uio *uio, int ioflag);
 
-EXTERN_C struct cdevsw vdmc_cdevsw = {
-    .d_version = D_VERSION, .d_name = "vdmc", .d_open = vdmc_open, .d_close = vdmc_close, .d_read = vdmc_read, .d_write = vdmc_write,
-    .d_ioctl = vdmc_ioctl};
+#ifdef __cplusplus
+extern "C" 
+{
+#endif
+    extern struct cdevsw vdmc_cdevsw; 
+#ifdef __cplusplus    
+}
+#endif
 
 #endif

@@ -26,7 +26,7 @@ extern "C" int vdmc_ioctl(struct cdev *dev, u_long cmd, caddr_t data, int fflag,
   
   case IOCTL_KRN_REQUEST:
     uprintf("IOCTL_KRN_REQUEST_CMD\n");
-    *((struct krn_request_t*) data) = io_requests.exit();
+    *((struct krn_request_t*) data) = io_requests->exit();
     return 0;
 
   case IOCTL_SRV_ANSWER:
@@ -60,3 +60,6 @@ extern "C" int vdmc_read(struct cdev *dev, struct uio *uio, int ioflag)
   return -1;
 }
 
+extern "C" struct cdevsw vdmc_cdevsw = {
+  .d_version = D_VERSION, .d_name = "vdmc", .d_open = vdmc_open, .d_close = vdmc_close, .d_read = vdmc_read, .d_write = vdmc_write,
+  .d_ioctl = vdmc_ioctl};

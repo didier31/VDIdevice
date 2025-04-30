@@ -27,7 +27,6 @@ template <typename T, size_t capacity> class kthreadsafe_queue {
   size_t allocatedCount = 0;
 
 public:
-  __attribute__((noinline)) __attribute__((visibility("default")))
   kthreadsafe_queue() {
     char description[51];
     snprintf(description, 51, "kthreadsafe_queue (%p) 's dataMtx", this);
@@ -41,9 +40,7 @@ public:
         snprintf(description, 51, "kthreadsafe_queue (%p) 's deallocMtx", this);
         cv_init(&deallocCV, description);*/
   }
-  __attribute__((noinline)) __attribute__((used))
-  __attribute__((visibility("default"))) T
-  exit() {
+  T exit() {
     mtx_lock(&deallocMtx);
     if (allocatedCount <= 0) {
       mtx_lock(&deallocMtx);
@@ -57,10 +54,7 @@ public:
     mtx_unlock(&deallocMtx);
     return r;
   }
-
-  __attribute__((noinline)) __attribute__((used))
-  __attribute__((visibility("default"))) void
-  enter(T a) {
+  void enter(T a) {
     mtx_lock(&allocMtx);
     if (allocatedCount >= capacity) {
       mtx_lock(&allocMtx);
@@ -74,8 +68,7 @@ public:
     mtx_unlock(&allocMtx);
   }
 
-  __attribute__((noinline))
-  __attribute__((visibility("default"))) ~kthreadsafe_queue() {
+  ~kthreadsafe_queue() {
     mtx_destroy(&dataMtx);
     mtx_destroy(&allocMtx);
     mtx_destroy(&deallocMtx);

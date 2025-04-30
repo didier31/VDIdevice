@@ -27,7 +27,7 @@ extern "C" int vd_write(struct cdev *dev, struct uio *uio, int ioflag) {
   char description[51];
   snprintf(description, 51, "tsleep(write_request.payload.io_buffer.ptr = %p)",
            write_request.payload.io_buffer.ptr);
-  io_requests.enter(write_request);
+  io_requests->enter(write_request);
   tsleep(write_request.payload.io_buffer.ptr, 0, description, 0);
   return 0;
 }
@@ -40,7 +40,7 @@ extern "C" int vd_read(struct cdev *dev, struct uio *uio, int ioflag) {
   char description[51];
   snprintf(description, 51, "tsleep(read_request.payload.io_buffer.ptr = %p)",
            read_request.payload.io_buffer.ptr);
-  io_requests.enter(read_request);
+  io_requests->enter(read_request);
   tsleep(read_request.payload.io_buffer.ptr, 0, description, 0);
   return 0;
 }
